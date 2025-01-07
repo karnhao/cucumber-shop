@@ -17,6 +17,7 @@ public class BuyStepdefs {
     public void the_store_is_ready_to_service_customers() {
         catalog = new ProductCatalog();
         order = new Order();
+        exception = null;
     }
 
     @Given("a product {string} with price {float} and stock of {int} exists")
