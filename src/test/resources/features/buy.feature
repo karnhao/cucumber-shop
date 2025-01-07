@@ -6,6 +6,7 @@ Background:
     Given the store is ready to service customers
     And a product "Bread" with price 20.50 and stock of 5 exists
     And a product "Jam" with price 80.00 and stock of 10 exists
+    And a product "Butter" with price 90.00 and stock of 100 exists
 
 Scenario: Buy one product
     When I buy "Bread" with quantity 2
@@ -15,3 +16,32 @@ Scenario: Buy multiple products
     When I buy "Bread" with quantity 2
     And I buy "Jam" with quantity 1
     Then total should be 121.00
+
+Scenario: Buy multiple products
+    When I buy "Bread" with quantity 1
+    And I buy "Jam" with quantity 1
+    And I buy "Butter" with quantity 100
+    Then total should be 9100.50
+
+Scenario Outline: Buy one product
+   When I buy <product> with quantity <quantity>
+   Then total should be <total>
+   Examples:
+       | product  | quantity |  total  |
+       | "Bread"  |     1    |   20.50 |
+       | "Jam"    |     2    |  160.00 |
+       | "Butter" |     1    |   90.00 |
+
+Scenario: Buy one product with insufficient quantity
+    When I buy "Jam" with quantity 2147183647
+    Then an exception is thrown
+
+
+Scenario Outline: Buy multiple products with insufficient quantity
+    When I buy <product> with quantity <quantity>
+    Then an exception is thrown
+    Examples:
+        | product | quantity |
+        | "Bread" |     1000 |
+        | "Jam"   |       11 |
+        | "Butter"| 99999999 |
